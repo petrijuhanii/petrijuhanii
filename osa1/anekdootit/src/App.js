@@ -18,15 +18,24 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState([0,0,0,0,0,0,0])
 
   const handleSelectClick = () => {
     setSelected(Math.floor(Math.random() * 7))
+  }
 
+  const handleVoteClick = () => {
+    const copy = { ...votes }
+    // kasvatetaan olion kentän 2 arvoa yhdellä
+    copy[selected] += 1
+    setVotes(copy) 
   }
 
   return (
     <div>
       <div>{anecdotes[selected]}</div>
+      <div>{votes[selected]}</div>
+      <Button handleClick={handleVoteClick} text='vote'/> 
       <Button handleClick={handleSelectClick} text='next anacdote'/> 
     </div>
   )
