@@ -1,0 +1,68 @@
+title Kommentin luominen
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note over palvelin:
+HTTP POST -pyyntö lähettää palvelimelle tallennettavan tekstin.
+Palvelin vastaa statuskoodilla 302, joka pyytää selaita tekemään GET pyynnön 
+end note
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+palvelin-->selain: HTML-koodi
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+palvelin-->selain: main.js
+
+note over selain:
+selain alkaa suorittaa js-koodia
+joka pyytää JSON-datan palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: [{ content: "HTML on helppoa", date: "2019-01-01" }, ...]
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka renderöi muistiinpanot näytölle
+end note
+
+
+
+title Single Page App sivun lataaminen
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+
+palvelin-->selain: HTML-koodi
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+palvelin-->selain: spa.js
+
+note over selain:
+selain alkaa suorittaa js-koodia
+joka pyytää JSON-datan palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: [{ content: "HTML on helppoa", date: "2019-01-01" }, ...]
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka lisää sivulle muistiinpanoja edustavat 
+HTML-elementit DOM-apia hyödyntäen
+end note
+
+
+
+
+title Single Page App kommentin lisääminen
+
+note over selain:
+Pyyntö sisältää JSON-muodossa olevan uuden muistiinpanon, 
+johon kuuluu sekä sisältö (content) että aikaleima (date):
+end note
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over palvelin:
+Palvelin vastaa kyselyyn statuskoodilla 201 created
+Responce {"message":"note created"}
+end note
