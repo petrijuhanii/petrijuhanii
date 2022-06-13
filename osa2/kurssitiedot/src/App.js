@@ -16,16 +16,19 @@ const Content = (props) => {
     </div>
   )
 }
-/*
+
 const Total = (props) => {
   console.log(props)
+  const initialValue = 0;
+  let total = props.parts.reduce( function(s, p) {
+    return s + +p.exercises;}, initialValue)
   return (
     <div>
-      <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
+      <p style={{fontWeight: "bold"}}>total of {total} exercises</p>
     </div>
   )
 }
-*/
+
 const Part = ({part}) => {
   console.log(part)
   return (
@@ -41,11 +44,12 @@ const Course = (props) => {
     <div>
       <Header key={props.course.id} name={props.course.name}/>
       <Content parts={props.course.parts} />
+      <Total parts={props.course.parts} />
     </div>
     
   )
 }
-/*<Total parts={course.parts} />*/
+
 const App = () => {
   const course = {
     name: 'Half Stack application development',
@@ -53,7 +57,7 @@ const App = () => {
     parts: [
       {
         name: ' React',
-        exercises: 13,
+        exercises: 11,
         id: 4
       },
       {
