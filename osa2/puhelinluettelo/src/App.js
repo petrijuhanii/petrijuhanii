@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 const Person = ({name}) => {
-  console.log(name)
   return (
     <div>
       <p>{name}</p>
@@ -11,18 +10,24 @@ const Person = ({name}) => {
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas' },
+    { name: 'Petri' }
   ]) 
   const [newName, setNewName] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
     const personObject = {
-      name: newName,
+      name: newName
     }
-  
-    setPersons(persons.concat(personObject))
-    setNewName('')
+    const found = persons.some(item => item.name === newName);
+    if(found){
+      alert(`${newName} is already added to phonebook`)
+    }
+    else{
+      setPersons(persons.concat(personObject))
+      setNewName('')
+    }
   }
 
   const handleNoteChange = (event) => {
