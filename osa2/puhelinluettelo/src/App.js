@@ -29,9 +29,13 @@ const PersonForm = (props) => {
       alert(`${props.newName} is already added to phonebook`)
     }
     else{
-      props.setPersons(props.persons.concat(personObject))
-      props.setNewName('')
-      props.setNewNumber('')
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          props.setPersons(props.persons.concat(response.data))
+          props.setNewName('')
+          props.setNewNumber('')
+    })
     }
   }
   return (
