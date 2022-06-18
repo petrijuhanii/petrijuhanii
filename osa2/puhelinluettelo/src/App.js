@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import noteService from './services/notes'
 
-const Person = ({person}) => {
+const Person = ({person, deletePerson}) => {
   return (
     <div>
-      <p>{person.name} {person.number}</p>
+      {person.name} {person.number}
+      <button onClick={deletePerson}> delete</button>
     </div>
   )
 }
@@ -54,8 +55,7 @@ const PersonForm = (props) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
@@ -91,6 +91,19 @@ const App = () => {
     }
   }
 
+  const deletePerson = id => {
+    if (window.confirm("Do you really want to delete?")) {
+      noteService
+      .deleteId(id)
+        .then(deletedP => {
+        setPersons(persons.map(person => person.id !== id ? person : deletedP))
+      })
+      window.location.reload()
+    }
+    
+    
+  }
+
   const personsToShow = showAll
   ? persons
   : persons.filter(person => person.name.toLowerCase().includes(newFilter))
@@ -107,7 +120,7 @@ const App = () => {
       setNewNumber={setNewNumber}/>
       <h2>Numbers</h2>
       {personsToShow.map(person =>
-        <Person key={person.name} person={person}/>)}
+        <Person key={person.name} person={person} deletePerson={() => deletePerson(person.id)}/>)}
     </div>
   )
 
