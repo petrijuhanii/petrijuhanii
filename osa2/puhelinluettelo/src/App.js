@@ -4,7 +4,7 @@ import noteService from './services/notes'
 const Person = ({person, deletePerson}) => {
   return (
     <div>
-      {person.name} {person.number}
+      {person.name} {person.number} {person.id}
       <button onClick={deletePerson}> delete</button>
     </div>
   )
@@ -27,7 +27,17 @@ const PersonForm = (props) => {
     }
     const found = props.persons.some(item => item.name === props.newName);
     if(found){
-      alert(`${props.newName} is already added to phonebook`)
+      const person = props.persons.find(item => item.name === props.newName);
+      const changedNumber = { ...person, number : props.newNumber }
+      if (window.confirm(`${props.newName} is already added to phonebook, replace the old number with a new one?`)){
+        noteService
+          .update(person.id, changedNumber).then(returnedPerson => {
+            props.setPersons(props.persons.map(p => p.id !== person.id ? person : returnedPerson))
+            props.setNewName('')
+        props.setNewNumber('')
+    })
+      }
+      window.location.reload()
     }
     else{
       noteService
