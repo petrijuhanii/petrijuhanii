@@ -4,7 +4,7 @@ import noteService from './services/notes'
 const Person = ({person, deletePerson}) => {
   return (
     <div>
-      {person.name} {person.number} {person.id}
+      {person.name} {person.number}
       <button onClick={deletePerson}> delete</button>
     </div>
   )
@@ -27,17 +27,33 @@ const PersonForm = (props) => {
     }
     const found = props.persons.some(item => item.name === props.newName);
     if(found){
-      const person = props.persons.find(item => item.name === props.newName);
-      const changedNumber = { ...person, number : props.newNumber }
       if (window.confirm(`${props.newName} is already added to phonebook, replace the old number with a new one?`)){
+        const person = props.persons.find(item => item.name === props.newName);
+        const changedPerson = { ...person, number: props.newNumber }
         noteService
-          .update(person.id, changedNumber).then(returnedPerson => {
-            props.setPersons(props.persons.map(p => p.id !== person.id ? person : returnedPerson))
+          .update(person.id, changedPerson)
+          .then(returnedPerson => {
+            props.setPersons(props.persons.map(p => p.id !== person.id ? p : returnedPerson))
             props.setNewName('')
-        props.setNewNumber('')
-    })
-      }
-      window.location.reload()
+            props.setNewNumber('')
+            props.setSuccesMessage(`${props.newName} number changed`)
+              setTimeout(() => {
+              props.setSuccesMessage(null)
+              }, 2000)
+          })
+          .catch(error => {
+            props.setErrorMessage(
+              `Information of ${person.name} has already been removed from server`
+            )
+            setTimeout(() => {
+              props.setErrorMessage(null)
+            }, 2000)
+            props.setPersons(props.persons.filter(n => n.id !== props.id))
+          })
+          }
+          
+      
+
     }
     else{
       noteService
@@ -47,6 +63,10 @@ const PersonForm = (props) => {
         props.setNewName('')
         props.setNewNumber('')
       })
+      props.setSuccesMessage(`Added ${props.newName}`)
+          setTimeout(() => {
+            props.setSuccesMessage(null)
+          }, 2000)
     }
   }
   return (
@@ -64,12 +84,38 @@ const PersonForm = (props) => {
   )
 }
 
+const ErrorNotification = ({ errorMessage }) => {
+  if (errorMessage === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {errorMessage}
+    </div>
+  )
+}
+
+const SuccesNotification = ({ succesMessage }) => {
+  if (succesMessage === null) {
+    return null
+  }
+
+  return (
+    <div className="succes">
+      {succesMessage}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [succesMessage, setSuccesMessage] = useState(null)
 
   useEffect(() => {
     noteService
@@ -101,19 +147,21 @@ const App = () => {
     }
   }
 
-  const deletePerson = id => {
+  const deletePerson = (id, name) => {
+    return () =>{
     if (window.confirm("Do you really want to delete?")) {
       noteService
       .deleteId(id)
-        .then(deletedP => {
-        setPersons(persons.map(person => person.id !== id ? person : deletedP))
+        .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
       })
-      window.location.reload()
-    }
-    
-    
+      setSuccesMessage(`Deleted ${name}`)
+          setTimeout(() => {
+            setSuccesMessage(null)
+          }, 2000)
+    }    
   }
-
+  }
   const personsToShow = showAll
   ? persons
   : persons.filter(person => person.name.toLowerCase().includes(newFilter))
@@ -122,15 +170,18 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <SuccesNotification succesMessage={succesMessage}/>
+      <ErrorNotification errorMessage={errorMessage}/>
       <Filter value={newFilter} onChange={handleFilterChange}/>
       <h2>add a new</h2>
       <PersonForm newName={newName} onChangeName={handleNameChange}
       newNumber={newNumber} onChangeNumber={handleNumberChange}
       persons={persons} setPersons={setPersons} setNewName={setNewName}
-      setNewNumber={setNewNumber}/>
+      setNewNumber={setNewNumber} setSuccesMessage={setSuccesMessage}
+      setErrorMessage={setErrorMessage}/>
       <h2>Numbers</h2>
       {personsToShow.map(person =>
-        <Person key={person.name} person={person} deletePerson={() => deletePerson(person.id)}/>)}
+        <Person key={person.id} person={person} deletePerson={deletePerson(person.id, person.name)} />)}
     </div>
   )
 

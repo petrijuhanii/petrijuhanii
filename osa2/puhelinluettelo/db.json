@@ -1,29 +1,9 @@
 {
   "persons": [
     {
-      "name": "Aaro Aikamies",
-      "number": "12342423",
-      "id": 7
-    },
-    {
       "name": "Jukka",
-      "number": "33",
-      "id": 9
-    },
-    {
-      "name": "Aarp",
-      "number": "380923",
-      "id": 10
-    },
-    {
-      "name": "dsdvsd",
-      "number": "4w635",
-      "id": 11
-    },
-    {
-      "name": "Petri",
-      "number": "41243",
-      "id": 12
+      "number": "432",
+      "id": 1
     }
   ]
 }
