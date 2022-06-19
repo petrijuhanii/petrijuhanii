@@ -18,9 +18,13 @@ let persons = [
     number: "39-23-6423122"
   }
 ]
-//app.get('/', (req, res) => {
-  //  res.send('<h1>Hello World!</h1>')
-  //})
+  app.get('/info', (req, res) => {
+    let time = new Date().toString()
+
+    res.send( `<p>
+        <span>Phonebook has info for ${persons.length} people</span></p>
+        <span>${time}</span>`)
+  })
   
   app.get('/api/persons', (req, res) => {
     res.json(persons)
