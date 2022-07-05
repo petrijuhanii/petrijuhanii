@@ -62,11 +62,17 @@ const PersonForm = (props) => {
         props.setPersons(props.persons.concat(returnedPerson))
         props.setNewName('')
         props.setNewNumber('')
-      })
-      props.setSuccesMessage(`Added ${props.newName}`)
+        props.setSuccesMessage(`Added ${props.newName}`)
           setTimeout(() => {
             props.setSuccesMessage(null)
           }, 2000)
+      })
+      .catch(error=> {props.setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          props.setErrorMessage(null)
+        }, 2000)})
+        
+      
     }
   }
   return (
