@@ -1,4 +1,5 @@
 const listHelper = require('../utils/list_helper')
+
 const blogs = [
   {
     _id: "5a422a851b54a676234d17f7",
@@ -96,24 +97,30 @@ describe('favourite blog', () => {
   })
 })
 
-
-/*
-const reverse = require('../utils/for_testing').reverse
-
-test('reverse of a', () => {
-  const result = reverse('a')
-
-  expect(result).toBe('a')
+describe('most blogs', () => {
+  test('of a bigger list', () => {
+    const result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual({
+      author: "Robert C. Martin",
+      blogs: 3
+    })
+  })
+  test('of empty list is empty', () => {
+    const result = listHelper.mostBlogs([])
+    expect(result).toEqual([])
+  })
 })
 
-test('reverse of react', () => {
-  const result = reverse('react')
-
-  expect(result).toBe('tcaer')
+describe('most likes', () => {
+  test('of a bigger list', () => {
+    const result = listHelper.mostLikes(blogs)
+    expect(result).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 17
+    })
+  })
+  test('of empty list is empty', () => {
+    const result = listHelper.mostLikes([])
+    expect(result).toEqual([])
+  })
 })
-
-test('reverse of saippuakauppias', () => {
-  const result = reverse('saippuakauppias')
-
-  expect(result).toBe('saippuakauppias')
-})*/

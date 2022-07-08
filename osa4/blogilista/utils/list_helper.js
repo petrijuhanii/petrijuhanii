@@ -1,3 +1,5 @@
+var lodash = require('lodash');
+
 const dummy = (blogs) => {
   return 1
 }
@@ -17,31 +19,49 @@ const favouriteBlog = (blogs) => {
     : (({title, author, likes})=>({title, author, likes}))(blogs[favouriteIndex[1]])
 }
 
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0){
+    return []
+  } 
+
+  const countAuthors = lodash.countBy(blogs, "author");
+  const mostCommonAuthor = Object.keys(countAuthors).reduce((x, y) => {
+    return countAuthors[x] > countAuthors[y] 
+      ? x 
+      : y;
+  });
+
+  return {author: mostCommonAuthor,
+          blogs: countAuthors[mostCommonAuthor], }
+}
+
+const mostLikes = (blogs) => {
+  if (blogs.length === 0){
+    return []
+  } 
+
+  const authorsAndLikes = blogs.map((blogs) => ({
+    author: blogs.author,
+    likes: blogs.likes,
+  }))
+  const sumLikes = authorsAndLikes.reduce((acc,{author, likes}) => {
+    acc[author] = acc[author] || {author, likes:0}
+    acc[author].likes += likes
+    return acc
+  },{})
+  console.log(Object.values(sumLikes))
+
+  return Object.values(sumLikes).reduce(function(prev, current) {
+    return prev.likes > current.likes 
+      ? prev  
+      : current
+})
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favouriteBlog,
+  mostBlogs,
+  mostLikes
 }
-
-
-
-/*
-  const reverse = (string) => {
-    return string
-      .split('')
-      .reverse()
-      .join('')
-  }
-  
-  const average = (array) => {
-    const reducer = (sum, item) => {
-      return sum + item
-    }
-  
-    return array.reduce(reducer, 0) / array.length
-  }
-  
-  module.exports = {
-    reverse,
-    average,
-  }*/
