@@ -49,7 +49,6 @@ const mostLikes = (blogs) => {
     acc[author].likes += likes
     return acc
   },{})
-  console.log(Object.values(sumLikes))
 
   return Object.values(sumLikes).reduce(function(prev, current) {
     return prev.likes > current.likes 
