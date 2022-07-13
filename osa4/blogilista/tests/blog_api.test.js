@@ -80,7 +80,7 @@ test('blogs identified by id', async () => {
   expect(blogsAtEnd[0].id).toBeDefined()
 });
 
-test('note without title and url is not added', async () => {
+test('blog without title and url is not added', async () => {
   const newBlog = {
     author: "Velho",
     likes: 10,
@@ -94,6 +94,47 @@ test('note without title and url is not added', async () => {
   const blogsAtEnd = await helper.blogsInDb()
 
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+})
+
+describe('deletion of a blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(
+      helper.initialBlogs.length - 1
+    )
+
+    const titles = blogsAtEnd.map(r => r.title)
+
+    expect(titles).not.toContain(blogToDelete.title)
+  })
+})
+
+test('blog amount of likes is changed', async () => {
+   const updatedBlog = {
+    title: "How to Java",
+    author: "Petti",
+    url: "www.jeejjee.xyz",
+    likes: 77
+  }
+
+  const blogsAtStart = await helper.blogsInDb()
+  const blogId = blogsAtStart[0].id
+
+  await api
+    .put(`/api/blogs/${blogId}`)
+    .send(updatedBlog)
+    .expect(200)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd[0].likes).toBe(77)
 })
 
 afterAll(() => {
