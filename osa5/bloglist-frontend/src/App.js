@@ -33,7 +33,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
   const [succesMessage, setSuccesMessage] = useState(null)
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const noteFormRef = useRef()
@@ -41,7 +41,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -64,7 +64,7 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
-      ) 
+      )
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -84,7 +84,7 @@ const App = () => {
 
     noteFormRef.current.toggleVisibility()
     try{
-      blogService.create({title, author, url})
+      blogService.create({ title, author, url })
       setSuccesMessage(`a new blog ${title} by ${author} added`)
       setTimeout(() => {
         setSuccesMessage(null)
@@ -99,7 +99,7 @@ const App = () => {
 
   function logOut () {
     console.log(window.localStorage.removeItem('loggedBlogappUser'))
-    setUser(null);
+    setUser(null)
   }
 
   const loginForm = () => (
@@ -108,7 +108,7 @@ const App = () => {
       <ErrorNotification errorMessage={errorMessage}/>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -117,7 +117,7 @@ const App = () => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -125,34 +125,34 @@ const App = () => {
         />
       </div>
       <button type="submit">login</button>
-    </form>      
+    </form>
   )
 
   const blogList = () => {
     return (
-    <div>
-      <h2>Blogs</h2>
-      <SuccesNotification succesMessage={succesMessage}/>
-      <p>{user.name} logged in 
-      <button onClick={logOut}>logout</button></p>
+      <div>
+        <h2>Blogs</h2>
+        <SuccesNotification succesMessage={succesMessage}/>
+        <p>{user.name} logged in
+          <button onClick={logOut}>logout</button></p>
 
-      <Togglable buttonLabel='new blog' ref={noteFormRef}>
-        <BlogForm createBlog={addBlog}/>
-      </Togglable>
+        <Togglable buttonLabel='new blog' ref={noteFormRef}>
+          <BlogForm createBlog={addBlog}/>
+        </Togglable>
 
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+        {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
+          <Blog key={blog.id} blog={blog} username={user.username}/>
+        )}
 
-    </div>
-  )}
-  
+      </div>
+    )}
+
   return (
     <div>
       {user === null ?
-      loginForm() :
-      blogList()
-    }
+        loginForm() :
+        blogList()
+      }
     </div>
   )
 }
