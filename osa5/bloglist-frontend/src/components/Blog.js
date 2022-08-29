@@ -36,11 +36,11 @@ const Blog = ({ blog, username }) => {
 
   if(!blogVisible){
     return (
-      <div>
+      <div className='blog'>
         <div style={blogStyle}>
           <div>
             {blog.title} {blog.author}
-            <button onClick={toggleVisibility}>show</button>
+            <button className='button' onClick={toggleVisibility}>show</button>
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@ const Blog = ({ blog, username }) => {
   }
   return (
     <div>
-      <div style={blogStyle}>
+      <div style={blogStyle} className="visibleContent">
         <div>
           {blog.title} {blog.author}
           <button onClick={toggleVisibility}>hide</button>
@@ -58,14 +58,14 @@ const Blog = ({ blog, username }) => {
         </div>
         <div>
           likes {blog.likes}
-          <button onClick={addLike}>like</button>
+          <button onClick={addLike} placeholder='likeButton'>like</button>
         </div>
         <div>
           {blog.user.name}
         </div>
         <div>
           {blog.user.username === username && (
-            <button onClick={remove}>remove</button>
+            <button  onClick={remove}>remove</button>
           )}
         </div>
       </div>
