@@ -85,6 +85,9 @@ const App = () => {
     noteFormRef.current.toggleVisibility()
     try{
       blogService.create({ title, author, url })
+        .then(returnedBlog => {
+          setBlogs(blogs.concat(returnedBlog))
+        })
       setSuccesMessage(`a new blog ${title} by ${author} added`)
       setTimeout(() => {
         setSuccesMessage(null)
@@ -109,6 +112,7 @@ const App = () => {
       <div>
         username
         <input
+          id='username'
           type="text"
           value={username}
           name="Username"
@@ -118,13 +122,14 @@ const App = () => {
       <div>
         password
         <input
+          id='password'
           type="password"
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button id="login-button" type="submit">login</button>
     </form>
   )
 
