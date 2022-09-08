@@ -1,0 +1,74 @@
+{
+  "notes": [
+    {
+      "content": "custom-hooks are great",
+      "id": 1
+    },
+    {
+      "content": "the best featrure ever <3",
+      "id": 2
+    },
+    {
+      "content": "note",
+      "id": 3
+    },
+    {
+      "content": "note",
+      "id": 4
+    },
+    {
+      "content": "uusi",
+      "id": 5
+    },
+    {
+      "content": "testi",
+      "id": 6
+    },
+    {
+      "content": "test",
+      "id": 7
+    },
+    {
+      "content": "kokeilu",
+      "id": 8
+    },
+    {
+      "content": "kokeiluja",
+      "id": 9
+    },
+    {
+      "content": "testailua",
+      "id": 10
+    },
+    {
+      "content": "toimii",
+      "id": 11
+    },
+    {
+      "content": "toimii",
+      "id": 12
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "kaltsoon",
+      "number": "045-2323456",
+      "id": 2
+    },
+    {
+      "name": "petri",
+      "number": "343-10294124",
+      "id": 3
+    },
+    {
+      "name": "erkki",
+      "number": "123-123123",
+      "id": 4
+    }
+  ]
+}
