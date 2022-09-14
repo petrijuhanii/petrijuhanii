@@ -60,7 +60,6 @@ const App = () => {
         <input {...nameInput} />
         <button>find</button>
       </form>
-
       <Country country={country} />
     </div>
   )
