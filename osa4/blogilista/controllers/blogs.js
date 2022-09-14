@@ -17,12 +17,25 @@ blogRouter.get('/:id', async (request, response) => {
   }
 })
 
+blogRouter.post('/:id/comments', async (request, response) => {
+  const comment = request.body;
+  const blog = await Blog.findById(request.params.id).populate("user", 
+    {username: 1, name: 1 })
 
+  blog.comments = blog.comments.concat(comment);
+  const updatedBlog = await blog.save();
+
+  if (updatedBlog) {
+    response.status(200).json(updatedBlog.toJSON())
+  } else {
+    response.status(404).end()
+  }
+})
 
 blogRouter.post('/', async (request, response) => {
   const body = request.body
   const user = request.user
-  const token = request.token;
+  const token = request.token
 
   const decodedToken = jwt.verify(token, process.env.SECRET);
   if (!(token && decodedToken.id)) {
@@ -34,7 +47,8 @@ blogRouter.post('/', async (request, response) => {
     author: body.author,
     url: body.url,
     likes: body.likes || 0,
-    user: user._id
+    comments: body.comments || [],
+    user: user._id,
   }).populate("user", { username: 1, name: 1 });
   
   const savedBlog = await blog.save()

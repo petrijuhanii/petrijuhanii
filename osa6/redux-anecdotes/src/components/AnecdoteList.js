@@ -18,7 +18,7 @@ const Anecdotes = () => {
     dispatch(updateAnecdoteVote(anecdote.id))
     dispatch(setNotification(`you voted '${anecdote.content}'`, 5))
   }
-
+ 
   return (
     <div>
       {anecdotesFiltered.map(anecdote =>

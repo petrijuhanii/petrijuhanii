@@ -4,6 +4,7 @@ import {
   Routes, Route, Link, 
   useParams, useNavigate
 } from "react-router-dom"
+import  { useField } from './hooks'
 
 const Menu = ({ anecdotes, addNew }) => {
   const padding = {
@@ -73,14 +74,22 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  //const [content, setContent] = useState('')
+  //const [author, setAuthor] = useState('')
+  //const [info, setInfo] = useState('')
+
+  const {reset: resetContent, ...contentField} = useField('text')
+  const {reset: resetAuthor, ...authorField} = useField('text')
+  const {reset: resetInfo, ...infoField} = useField('text')
 
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    const content = contentField.value
+    const author = authorField.value
+    const info = infoField.value
+    
     props.addNew({
       content,
       author,
@@ -93,24 +102,27 @@ const CreateNew = (props) => {
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
-        </div>
-        <div>
-          author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
-        </div>
-        <div>
-          url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
-        </div>
-        <button>create</button>
+      <form>
+        content:
+        <input {...contentField} />
+        <br/>
+        author:
+        <input {...authorField} />
+        <br/>
+        info:
+        <input {...infoField} />
+        <br/>
+        
       </form>
+      <button onClick={handleSubmit}>create</button>
+      <button onClick={(event) => {
+        resetContent(event); 
+        resetAuthor(event);
+        resetInfo(event); }}>
+          reset</button>
+      
     </div>
   )
-
 }
 
 const App = () => {
