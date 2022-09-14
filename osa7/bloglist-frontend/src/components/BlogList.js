@@ -1,9 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { updateBlogLikes } from '../reducers/blogReducer'
-import { removeBlog } from '../reducers/blogReducer'
-import { setSuccesNotification } from '../reducers/notificationReducer'
+import { useRef } from 'react'
+import { useSelector } from 'react-redux'
+import Notification from './Notification'
+import Togglable from './Togglable'
+import BlogForm from './BlogForm'
+import { Link } from 'react-router-dom'
 
-const Blogs = (user) => {
+
+const Blogs = () => {
+  const noteFormRef = useRef()
   const blogs = useSelector(state => state.blogs)
 
   const blogStyle = {
@@ -17,47 +21,17 @@ const Blogs = (user) => {
   const blogsInOrder = [...blogs]
   blogsInOrder.sort((a, b) => b.likes - a.likes)
 
-  const dispatch = useDispatch()
-
-  const like = (blog) => {
-    console.log('like', blog.id)
-    dispatch(updateBlogLikes(blog.id))
-    dispatch(setSuccesNotification(`you liked '${blog.title}'`, 5))
-  }
-
-  const remove = (blog) => {
-    if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
-      console.log('delete', blog)
-      dispatch(removeBlog(blog))
-      dispatch(setSuccesNotification(`Blog ${blog.title} removed `, 5))
-    }
-  }
-
   return (
     <div>
+      <h2>Blogs</h2>
+      <Notification />
+
+      <Togglable buttonLabel='new blog' ref={noteFormRef}>
+        <BlogForm />
+      </Togglable>
       {blogsInOrder.map(blog =>
         <div key={blog.id} style={blogStyle}>
-          <div>
-            {blog.title}
-          </div>
-          <div>
-            {blog.author}
-          </div>
-          <div>
-            {blog.url}
-          </div>
-          <div>
-            likes {blog.likes}
-            <button onClick={() => like(blog)} placeholder='likeButton'>like</button>
-          </div>
-          <div>
-            {blog.user.name}
-          </div>
-          <div>
-            {blog.user.username === user.user.username && (
-              <button onClick={() => remove(blog)}>remove</button>
-            )}
-          </div>
+          <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
         </div>
       )}
     </div>

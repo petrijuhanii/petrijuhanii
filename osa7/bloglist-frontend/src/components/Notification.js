@@ -25,7 +25,7 @@ const Notification = (props) => {
   }
 
   console.log(props.notification)
-  if(props.notification===''){
+  if(props.notification.length===0){
     return(<div></div>)
   }
   return (
