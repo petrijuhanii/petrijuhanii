@@ -12,8 +12,19 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   const [ createBook ] = useMutation(NEW_BOOK, {
-    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ]
-  })
+    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS },],
+    update: (store, response) => {
+      genres.forEach((genre) => {
+        try {
+          const booksInStore = store.readQuery({ query: ALL_BOOKS, variables: { genre }})
+          store.writeQuery({ query: ALL_BOOKS, variables: { genre },
+            data: { allBooks: [...booksInStore.allBooks].concat(response.data.addBook)}
+          })
+        } catch (error) {
+          console.log(`${genre}`);
+        }
+      })
+    }})
 
   if (!props.show) {
     return null
@@ -21,7 +32,7 @@ const NewBook = (props) => {
 
   const submit = async (event) => {
     event.preventDefault()
-
+    
     console.log('add book...')
     createBook({ variables: { title, published, author, genres }})
     
@@ -65,7 +76,7 @@ const NewBook = (props) => {
         <div>
           <input
             value={genre}
-            onChange={({ target }) => setGenre(target.value)}
+            onChange={({ target }) => setGenre([target.value])}
           />
           <button onClick={addGenre} type="button">
             add genre
