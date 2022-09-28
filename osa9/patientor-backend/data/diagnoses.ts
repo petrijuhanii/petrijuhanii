@@ -1,4 +1,7 @@
-[
+import { DiagnoseEntry } from "../src/types";
+import {toNewDiagnosisEntry} from "../src/utils";
+
+const data = [
     {
       "code": "M24.2",
       "name": "Disorder of ligament",
@@ -76,4 +79,11 @@
       "name": "Other proliferative retinopathy",
       "latin": "Alia retinopathia proliferativa"
     }
-  ]
+  ];
+
+  const diagnosisData: DiagnoseEntry[] = data.map((obj) => {
+    const object = toNewDiagnosisEntry(obj);
+    return object;
+  });
+  
+  export default diagnosisData;
