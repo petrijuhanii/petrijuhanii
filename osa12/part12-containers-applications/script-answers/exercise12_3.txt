@@ -1,0 +1,5 @@
+root@14ce8eef2749:/# script
+Script started, output log file is 'typescript'.
+# nano /usr/src/app/index.js
+# exit
+Script done.
